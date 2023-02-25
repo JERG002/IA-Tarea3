@@ -1,48 +1,54 @@
 import heapq
 import random
+import time 
 
-def knapsack(items, capacity):
+inicio = time.time()
+def knapsack(obto, cap):
     def heuristic(node):
-        weight, value, taken = node
-        remaining_capacity = capacity - weight
-        remaining_items = items[len(taken):]
-        remaining_items.sort(key=lambda item: item[1]/item[0], reverse=True)
-        heuristic_value = value
-        for item in remaining_items:
-            if item[0] <= remaining_capacity:
-                heuristic_value += item[1]
-                remaining_capacity -= item[0]
+        peso, valor, tomado = node
+        restantes_cap = cap - peso
+        restantes_obto = obto[len(tomado):]
+        restantes_obto.sort(key=lambda item: item[1]/item[0], reverse=True)
+        heuristic_valor = valor
+        for item in restantes_obto:
+            if item[0] <= restantes_cap:
+                heuristic_valor += item[1]
+                restantes_cap -= item[0]
             else:
-                heuristic_value += remaining_capacity * item[1] / item[0]
+                heuristic_valor += restantes_cap * item[1] / item[0]
                 break
-        return -heuristic_value
+        return -heuristic_valor
 
     heap = [(0, (0, 0, []))]
-    best_value = 0
-    best_taken = []
+    mejor_val = 0
+    mejor_tomado = []
     while heap:
         _, node = heapq.heappop(heap)
-        weight, value, taken = node
-        if weight > capacity:
+        peso, valor, tomado = node
+        if peso > cap:
             continue
-        if not taken:
-            remaining_items = items
+        if not tomado:
+            restantes_obto = obto
         else:
-            remaining_items = items[len(taken):]
-        for i, item in enumerate(remaining_items):
-            new_weight = weight + item[0]
-            new_value = value + item[1]
-            new_taken = taken + [i]
-            new_node = (new_weight, new_value, new_taken)
-            if new_weight <= capacity and new_value > best_value:
-                best_value = new_value
-                best_taken = new_taken
-            heapq.heappush(heap, (heuristic(new_node), new_node))
-    return (best_value, [items[i] for i in best_taken])
+            restantes_obto = obto[len(tomado):]
+        for i, item in enumerate(restantes_obto):
+            nue_peso = peso + item[0]
+            nue_valor = valor + item[1]
+            nue_tomado = tomado + [i]
+            nue_node = (nue_peso, nue_valor, nue_tomado)
+            if nue_peso <= cap and nue_valor > mejor_val:
+                mejor_val = nue_valor
+                mejor_tomado = nue_tomado
+            heapq.heappush(heap, (heuristic(nue_node), nue_node))
+    return (mejor_val, [obto[i] for i in mejor_tomado])
 
-items = [(random.randint(1, 10), random.randint(1, 10)) for i in range(10)]
-capacity = random.randint(10, 20)
-print(f"Objetos: {items}")
-best_value, best_items = knapsack(items, capacity)
-print(f"Best value: {best_value}")
-print(f"Best items: {best_items}")
+obto = [(random.randint(1, 50), random.randint(1, 50)) for i in range(50)]
+cap = random.randint(10, 20)
+print(f"Objetos: {obto}")
+mejor_val, mejor_obj = knapsack(obto, cap)
+print(f"Mejor valor: {mejor_val}")
+print(f"Mejor objeto: {mejor_obj}")
+
+fin = time.time()
+
+print('Tiempo de ejecucion: ', fin-inicio)

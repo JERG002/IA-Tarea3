@@ -40,7 +40,7 @@ def generador_grafo(nodos):
 
     return instancia
 
-CantidadNodos = 10 
+CantidadNodos = 100 
 
 inicial  = str(random.randint(1, CantidadNodos))
 final  = str(random.randint(1, CantidadNodos))
@@ -54,7 +54,7 @@ grafo = generador_grafo(CantidadNodos)
 #plt.axes("equals")
 #plt.show()
 
-g = GRP.WeightedGraph(grafo)
+g = GRP.pesoedGraph(grafo)
 
 
 print("DFS random:", g.DFS(str(random.randint(1, CantidadNodos))))

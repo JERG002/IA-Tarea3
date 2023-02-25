@@ -12,7 +12,7 @@ class Graph():
     # Devuelve una representación formal del contenido del grafo
     def __repr__(self):
         nodes = ''
-        for node, edges in self.graph.items():
+        for node, edges in self.graph.obto():
             nodes += f'{node}: {edges}\n'
         return nodes
 
@@ -47,7 +47,7 @@ class Graph():
     # Devuelve el número de arcos del grafo
     def size(self):
         arcs = []
-        for node, edges in self.graph.items():
+        for node, edges in self.graph.obto():
             for edge in edges:
                 sorted_edge = sorted([node, edge])
                 if sorted_edge not in arcs:

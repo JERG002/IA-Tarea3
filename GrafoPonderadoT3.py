@@ -4,7 +4,7 @@
 import grafo as GR
 
 
-class WeightedGraph(GR.Graph):
+class pesoedGraph(GR.Graph):
     # Constructor, por defecto crea un diccionario vacío
     # El grafo se presenta como un diccionario de la forma
     # {nodo: [arcos]}
@@ -15,7 +15,7 @@ class WeightedGraph(GR.Graph):
     # Devuelve el número de arcos del grafo
     def size(self):
         arcs = []
-        for node, edges in self.graph.items():
+        for node, edges in self.graph.obto():
             for edge, w in edges:
                 sorted_edge = sorted([node, edge])
                 if sorted_edge not in arcs:
@@ -34,16 +34,16 @@ class WeightedGraph(GR.Graph):
     # Inserta una arco entre los nodos indicados
     # El arco es una lista con los nodos que une
     # Si no existe el nodo lo inserta
-    def addEdge(self, edge, weight):
+    def addEdge(self, edge, peso):
         n1, n2 = tuple(edge)
         for n, e in [(n1, n2), (n2, n1)]:
             if n in self.graph:
                 if e not in self.graph[n]:
-                    self.graph[n].append((e, weight))
+                    self.graph[n].append((e, peso))
                     if n == e:
                         break       # es un lazo
             else:
-                self.graph[n] = [(e, weight)]
+                self.graph[n] = [(e, peso)]
 
     # Elimina una arco entre nodos
     # El arco es una lista con los nodos que une
@@ -51,9 +51,9 @@ class WeightedGraph(GR.Graph):
         n1, n2 = tuple(edge)
         for n, e in [(n1, n2), (n2, n1)]:
             if n in self.graph:
-                for node, weight in self.graph[n]:
+                for node, peso in self.graph[n]:
                     if node == e:
-                        self.graph[n].remove((node, weight))
+                        self.graph[n].remove((node, peso))
 
     # Recorrido en profundidad (Depth First Search)
     def DFS(self, node):
@@ -108,24 +108,24 @@ class WeightedGraph(GR.Graph):
         predecessor = {node: node for node in self.graph.keys()} 
         visited = {}
         current = start
-        currentWeight = 0
-        unvisited[current] = currentWeight      # nodo origen peso 0
+        currentpeso = 0
+        unvisited[current] = currentpeso      # nodo origen peso 0
         while True:
-            for node, weight in self.graph[current]:
+            for node, peso in self.graph[current]:
                 if node not in unvisited:
                     continue                    # nodo ya tratado
-                newWeight = currentWeight + weight
-                if unvisited[node] > newWeight:
+                newpeso = currentpeso + peso
+                if unvisited[node] > newpeso:
                     # Tomar el nodo con el menor peso
-                    unvisited[node] = newWeight
+                    unvisited[node] = newpeso
                     predecessor[node] = current # predecesor con el menor peso
-            visited[current] = currentWeight    # visitado con el menor peso 
+            visited[current] = currentpeso    # visitado con el menor peso 
             unvisited.pop(current)              # eliminar de los no visitados
             if not unvisited:
                 break       # Terminar el bucle si no hay nodos por visitar
             # Tomar el nodo con el menor peso de los no visitados
-            candidates = [(n, w) for n, w in unvisited.items() if w != INF]
-            current, currentWeight = sorted(candidates, key = lambda x: x[1])[0]
+            candidates = [(n, w) for n, w in unvisited.obto() if w != INF]
+            current, currentpeso = sorted(candidates, key = lambda x: x[1])[0]
         # Reconstrucción del camino de longitud mínima
         # Se parte del nodo final al inicial
         path = []
